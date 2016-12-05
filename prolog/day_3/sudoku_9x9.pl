@@ -5,34 +5,23 @@
 
 valid([]).
 valid([H|T]) :-
+  length(H, Length),
+  H ins 1..Length,
   all_distinct(H),
   valid(T).
 
 pretty_print([]).
-pretty_print([H|T]) :-
-  writeln(H),
-  pretty_print(T).
+pretty_print([H|T]) :- writeln(H), pretty_print(T).
 
-rows(Puzzle) :-
-  valid(Puzzle).
-
-cols(Puzzle) :-
-  transpose(Puzzle, Cols),
-  valid(Cols).
-  
 squares([]).
 squares([[A,B,C|_], [D,E,F|_], [G,H,I|_]|Puzzle]) :-
   all_distinct([A,B,C,D,E,F,G,H,I]),
   squares(Puzzle).
 
-sudoku(Puzzle) :-
-  length(Puzzle, Length),
-  append(Puzzle, BigList), 
-  BigList ins 1..Length,
-
-  rows(Puzzle),
-  cols(Puzzle),
-  squares(Puzzle),
-
-  pretty_print(Puzzle).
+sudoku(Rows) :-
+  valid(Rows),
+  transpose(Rows, Cols),
+  valid(Cols),
+  squares(Rows),
+  pretty_print(Rows).
 
